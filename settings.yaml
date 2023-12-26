@@ -1,0 +1,10 @@
+redis:
+  host: "localhost"
+  port: "xxx"
+  password: "xxx"
+  db: 0
+mysql:
+  host: "localhost"
+  username: "xxx"
+  password: "xxx"
+  db: "xxx"
