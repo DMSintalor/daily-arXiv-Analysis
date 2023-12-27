@@ -17,9 +17,10 @@ class Article(Base):
     pdf_link = Column(String(length=300), nullable=False)
     doi = Column(String(length=100))
     journal = Column(String(length=100))
+    subjects = Column(String(length=100))
     date = Column(DateTime, nullable=False)
 
-    def __init__(self, title, abstract, authors, link, pdf_link, doi, journal, date):
+    def __init__(self, title, abstract, authors, link, pdf_link, doi, journal, subjects, date):
         self.title = title
         self.abstract = abstract
         self.authors = authors
@@ -27,6 +28,7 @@ class Article(Base):
         self.pdf_link = pdf_link
         self.doi = doi
         self.journal = journal
+        self.subjects = subjects
         self.date = date
 
     def to_dict(self):

@@ -28,4 +28,5 @@ class ArticleStruct(BaseStruct):
     pdf_link: LinkStruct
     doi: str
     journal: str
+    subjects: str
     date: str
