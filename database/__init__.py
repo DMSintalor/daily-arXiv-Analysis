@@ -23,3 +23,12 @@ class DatabaseController(object):
 
     def get_base(self):
         return self.mysql.get_base()
+
+    async def push_wait_queue(self, key, values):
+        await self.redis.push_value(key, values)
+
+    async def pop_wait_queue(self, key):
+        return await self.redis.pop_value(key)
+
+    async def get_wait_queue(self, key):
+        return await self.redis.get_value(key)

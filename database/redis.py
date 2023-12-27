@@ -8,7 +8,6 @@ class RedisController:
         self.port = port
         self.password = password
         self.redis_db = db
-        print(self.__dict__)
         self.db = aioredis.from_url(
             'redis://{}:{}'.format(self.host, self.port),
             password=password,
@@ -20,6 +19,12 @@ class RedisController:
 
     async def get_value(self, key):
         return await self.db.get(key)
+
+    async def push_value(self, key, values):
+        return await self.db.rpush(key, values)
+
+    async def pop_value(self, key):
+        return await self.db.lpop(key)
 
 
 async def main(cfg):
