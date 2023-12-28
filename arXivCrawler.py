@@ -60,7 +60,7 @@ class Crawler:
         articles_per_page = self.cfg['crawler']['articles_per_page']
         pbar = tqdm.tqdm(total=self.article_nums, desc='Getting Articles')
         for i in range(0, self.article_nums, articles_per_page):
-            url = self.join_url('/list/cs/pastweek?skip={}&show={}'.format(i // articles_per_page, articles_per_page))
+            url = self.join_url('/list/cs/pastweek?skip={}&show={}'.format(i, articles_per_page))
             dom = self.get_dom(url)
             articles_link_list = dom.xpath('//*[@id="dlpage"]/dl/dt')
             articles_cont_list = dom.xpath('//*[@id="dlpage"]/dl/dd')
@@ -90,6 +90,7 @@ class Crawler:
                         db.add(art)
                         db.commit()
                         add_cnt += 1
+                        time.sleep(.3)
                         if add_cnt % 50 == 0:
                             time.sleep(10)
                     else:
