@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 
 from . import DatabaseController
 
@@ -19,6 +20,10 @@ class Article(Base):
     journal = Column(String(length=100))
     subjects = Column(String(length=100))
     date = Column(DateTime, nullable=False)
+    # 0:unread; 1:read; 2:collected; -1:dislike
+    status = Column(Integer, default=0)
+
+    article_operations = relationship("ArticleOperations", back_populates="article")
 
     def __init__(self, title, abstract, authors, link, pdf_link, doi, journal, subjects, date):
         self.title = title
@@ -31,18 +36,31 @@ class Article(Base):
         self.subjects = subjects
         self.date = date
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'abstract': self.abstract,
-            'authors': self.authors,
-            'link': self.link,
-            'pdf_link': self.pdf_link,
-            'doi': self.doi,
-            'journal': self.journal,
-            'date': self.date.strftime('%Y-%m-%d')
-        }
+    def to_dict(self, fields=None):
+        if fields is None:
+            return {
+                'id': self.id,
+                'title': self.title,
+                'abstract': self.abstract,
+                'authors': self.authors,
+                'link': self.link,
+                'pdf_link': self.pdf_link,
+                'doi': self.doi,
+                'journal': self.journal,
+                'date': self.date.strftime('%Y-%m-%d')
+            }
+        else:
+            return {getattr(self, field) for field in fields}
+
+
+class ArticleOperations(Base):
+    __tablename__ = 'ArticleOperations'
+
+    id = Column(Integer, primary_key=True)
+    article_id = Column(Integer, ForeignKey('Article.id'), nullable=False)
+    operate_id = Column(Integer)
+
+    article = relationship("Article", back_populates="article_operations")
 
 
 db.create_db()
